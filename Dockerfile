@@ -1,7 +1,7 @@
 FROM python
 
 WORKDIR /9_streamlit_SQLModel
-RUN git clone https://github.com/Kiana-Jahanshid/PyDeploy.git .
+RUN git clone https://github.com/Kiana-Jahanshid/chatbot.git .
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 EXPOSE 8501
