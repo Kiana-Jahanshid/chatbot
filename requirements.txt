@@ -4,3 +4,4 @@ streamlit_pdf_viewer
 streamlit_authenticator
 requests
 sqlalchemy
+psycopg2
