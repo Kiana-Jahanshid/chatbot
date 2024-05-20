@@ -4,8 +4,8 @@ from models import User , Message # these 2 class will create 2 table
 import authenticator 
 import json
 import requests
-import dotenv
-import os
+#import dotenv
+#import os
 
 
 #dotenv = dotenv.load_dotenv()
