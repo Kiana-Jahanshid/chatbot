@@ -30,7 +30,7 @@ with col1 :
         st.session_state.users = []
 
     st.title("signup")
-    with st.form("signup"):
+    with st.form("signupform"):
         user_name = st.text_input(label="Name" , placeholder=" Enter your name ... ")
         user_username = st.text_input(label="Username" , placeholder="Enter a Username ....")
         user_email = st.text_input(label="Email" , placeholder="Enter your Email ...")
@@ -66,7 +66,7 @@ with col1 :
 
 with col2 :
     st.title("login")
-    with st.form("login"):
+    with st.form("loginform"):
         login_username = st.text_input(label="UserName" , placeholder="Enter your username ...")
         login_pass = st.text_input(label="Password" , placeholder="Enter your password ...")
         submit = st.form_submit_button("Submit")
