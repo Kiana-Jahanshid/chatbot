@@ -3,5 +3,3 @@ streamlit
 streamlit_authenticator
 requests
 sqlalchemy
-psycopg2
-psycopg2-binary
