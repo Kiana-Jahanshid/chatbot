@@ -45,6 +45,8 @@ def connecting_to_db():
 
 engine = connecting_to_db()
 
+def setGlobal(name, value):
+    globals()[name] = value
 
 def process(user_text_message , id):
     ai_text_message = ai(user_text_message=user_text_message)
@@ -54,8 +56,8 @@ def process(user_text_message , id):
     # backend (using session.add)
     # به ازای هر پیام جدید ،‌ اطلاعات توی دیتابیس هم اد بشه 
     # id is automatically being set
-    user_message = Message(text= user_text_message , type="user" , user_id=id) # این یک باید عوض بشه using streamlit_authenticator and app.py
-    ai_message = Message(text= ai_text_message , type= "ai" , user_id=id)
+    user_message = Message(text= user_text_message , type="user" , user_id=st.session_state["id"]) # این یک باید عوض بشه using streamlit_authenticator and app.py
+    ai_message = Message(text= ai_text_message , type= "ai" , user_id=st.session_state["id"])
     with Session(engine) as session :
         session.add(user_message)
         session.add(ai_message)
@@ -81,6 +83,14 @@ def ai(user_text_message):
     response = result['openai']['generated_text']
     return response
 
+def signupid(signup_id):
+    signup_id = signup_id
+    return signup_id
+
+def loginid(login_id):
+    return login_id
+
+
 
 if "messages" not in st.session_state :
     st.session_state.messages = []
@@ -92,13 +102,13 @@ for message in st.session_state.messages :
 
 if user_text_message := st.chat_input("send new message") : 
 
-    with sqlite3.connect('auth_database.db') as conn:
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM userauth ORDER BY id DESC LIMIT 1")
-        last_row_of_db = cursor.fetchone()
+    # with sqlite3.connect('auth_database.db') as conn:
+    #     cursor = conn.cursor()
+    #     cursor.execute("SELECT * FROM userauth ORDER BY id DESC LIMIT 1")
+    #     last_row_of_db = cursor.fetchone()
+    #print("idddd" , last_row_of_db[0])
 
-    print("idddd" , last_row_of_db[0])
-    ai_text_message =  process(user_text_message , last_row_of_db[0])
+    ai_text_message =  process(user_text_message ,st.session_state["id"])
     with st.chat_message("user"):
         st.write(user_text_message)
 

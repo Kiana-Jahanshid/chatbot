@@ -2,7 +2,11 @@ import streamlit as st
 from sqlmodel import Field , Session , SQLModel , create_engine , select, Relationship 
 from typing import Optional
 from sqlalchemy.orm import sessionmaker
-import pages.chatbot 
+import pages.chatbot as chatbot
+
+
+def setGlobal(name, value):
+    globals()[name] = value
 
 class UserAuth(SQLModel , table=True): # table= True means : create table from this class
     # if a table is existed , there is no need to create it again 
@@ -22,7 +26,7 @@ def connect_db():
     SQLModel.metadata.create_all(engine)
     return engine
 
-
+global finalid 
 engine = connect_db()
 col1 , col2 = st.columns(2)
 with col1 :
@@ -36,7 +40,7 @@ with col1 :
         user_email = st.text_input(label="Email" , placeholder="Enter your Email ...")
         user_password = st.text_input(label="Password" , placeholder="Enter a password")
         user_info = UserAuth(name=user_name , username=user_username , email=user_email , password=user_password)    
-        submitted = st.form_submit_button("Submit")
+        submitted = st.form_submit_button("Submit signup")
         
     if submitted :
         with Session(engine) as session :
@@ -51,6 +55,7 @@ with col1 :
                 session.commit()
                 st.success("signup completeted successfully ")
                 current_user = select(UserAuth).where(UserAuth.username == user_username)
+                signup_id = select(UserAuth.id).where(UserAuth.username == user_username)
                 res = session.exec(current_user)
                 res = res.first()
                 print("res : " , res)
@@ -69,7 +74,7 @@ with col2 :
     with st.form("loginform"):
         login_username = st.text_input(label="UserName" , placeholder="Enter your username ...")
         login_pass = st.text_input(label="Password" , placeholder="Enter your password ...")
-        submit = st.form_submit_button("Submit")
+        submit = st.form_submit_button("Submit login")
 
     if submit :
         with Session(engine) as session :
@@ -86,8 +91,8 @@ with col2 :
                 print("user_id2 " , Id.temp_id)
                 finalid = Id.temp_id
 
-
-                st.success("You loged in successfully")
+                st.session_state['id'] = finalid
+                st.success("You logged in successfully")
                 st.empty()
                 st.switch_page("pages/chatbot.py")
 
